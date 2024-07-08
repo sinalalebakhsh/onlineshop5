@@ -1,0 +1,38 @@
+pipenv install
+pipenv install django
+pipenv requirements > requirements.txt
+# Delete first line in requirements.txt
+# Active pipenv with this
+pipenv shell
+
+django-admin startproject config .
+
+python manage.py runserver
+# CHECK BROWSER
+# CREATE Dockerfile and add config like this
+    # For Django5 use python:3.10 
+    # For Django4 use python:3.9 OR between 3.0 to 3.9
+    FROM python:3.10
+
+    ENV PYTHONDONTWRITEBYTECODE 1
+    ENV PYTHONUNBUFFERED 1
+
+    WORKDIR /code
+
+    # Copy the requirements.txt file into the container at /code
+    COPY requirements.txt /code/
+
+    # Install any dependencies specified in requirements.txt
+    RUN pip install --no-cache-dir -r requirements.txt
+    # RUN pip install -r requirements.txt
+
+    COPY . /code/
+
+
+docker build .
+# CREATE docker-compose.yml and add config
+docker-compose up
+# IF Got Error and than fix it use this command for
+# Rebuild the Docker image:
+# Force the rebuild of the image to ensure all changes are applied.
+docker-compose up --build
